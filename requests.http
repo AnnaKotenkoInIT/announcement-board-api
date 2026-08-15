@@ -1,0 +1,120 @@
+### Register user
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "anna124",
+  "email": "anna124@example.com",
+  "password": "password123",
+  "name": "Anna"
+}
+
+
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "anna124",
+  "password": "password123"
+}
+
+
+### Get current user
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgwOTA0NiwiZXhwIjoxNzg2ODA5OTQ2fQ.IwiB8Fmu71fOVQZ2M-YKKooMV-4qhqzN6LDGBERWob
+
+
+### Refresh access token
+POST http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgxMTAzNSwiZXhwIjoxNzg3NDE1ODM1fQ.oAgMNT5wJlSWWeygvaOEOydM74DywT_iyEeH_GT7BOE"
+}
+
+### Get current user
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgxMTA2NCwiZXhwIjoxNzg2ODExOTY0fQ.5EsaQ22vGr2AlppANs70Z_cpygq80NWMlnTBH24D0_8
+
+### Logout
+POST http://localhost:3000/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgxMTM5NCwiZXhwIjoxNzg3NDE2MTk0fQ.s-jKtWs1E4BuZmwE_PfR-P14NvPK25uoNY4lYH2Mpx4"
+}
+
+### Refresh after "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgxMTM5NCwiZXhwIjoxNzg3NDE2MTk0fQ.s-jKtWs1E4BuZmwE_PfR-P14NvPK25uoNY4lYH2Mpx4"
+POST http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgxMTM5NCwiZXhwIjoxNzg3NDE2MTk0fQ.s-jKtWs1E4BuZmwE_PfR-P14NvPK25uoNY4lYH2Mpx4"
+}
+
+### Create announcement
+POST http://localhost:3000/announcements
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMjIyNiwiZXhwIjoxNzg2ODIzMTI2fQ.8vQkgBSvg8vBNVNcxlXZCKTDeCguDar_wSVw8s7U-kI
+
+{
+  "title": "Продам ноутбук акеп",
+  "description": "Майже новий велосипед",
+  "price": 5000,
+  "category": "other"
+}
+
+### Create announcement without token
+POST http://localhost:3000/announcements
+Content-Type: application/json
+
+{
+  "title": "Продам телефон",
+  "description": "У хорошому стані",
+  "price": 10000,
+  "category": "electronics"
+}
+
+### Get announcements
+GET http://localhost:3000/announcements
+
+### Get announcement by ID
+GET http://localhost:3000/announcements/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+
+### Update announcement
+PATCH http://localhost:3000/announcements/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+
+{
+  "price": 1500
+}
+
+### Delete announcement
+DELETE http://localhost:3000/announcements/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+
+### Get deleted announcement
+GET http://localhost:3000/announcements/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+
+
+### All
+GET http://localhost:3000/announcements
+
+### Page 2
+GET http://localhost:3000/announcements?page=2
+
+### Search
+GET http://localhost:3000/announcements?search=ноутбук
+
+### Oldest
+GET http://localhost:3000/announcements?sort=oldest
+
+### All parameters
+GET http://localhost:3000/announcements?page=2&search=ноутбук&sort=oldest
+
+### Invalid sort
+GET http://localhost:3000/announcements?sort=wrong
