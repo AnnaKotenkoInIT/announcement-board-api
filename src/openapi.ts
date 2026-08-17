@@ -12,8 +12,6 @@ import {
 } from './validators/auth.validator.ts';
 
 import {
-  createAnnouncementSchema,
-  updateAnnouncementSchema,
   announcementIdSchema,
   announcementQuerySchema,
 } from './validators/announcements.validator.ts';
@@ -140,7 +138,7 @@ registry.registerPath({
     },
   },
   responses: {
-    200: {
+    204: {
       description: 'Logout successful',
     },
     400: {
@@ -193,20 +191,52 @@ registry.registerPath({
   },
 });
 
+/* =========================
+   CREATE ANNOUNCEMENT
+========================= */
+
 registry.registerPath({
   method: 'post',
   path: '/announcements',
   tags: ['Announcements'],
   security: [{ bearerAuth: [] }],
+
   request: {
     body: {
       content: {
-        'application/json': {
-          schema: createAnnouncementSchema,
+        'multipart/form-data': {
+          schema: {
+            type: 'object',
+            properties: {
+              title: {
+                type: 'string',
+                example: 'Продам велосипед',
+              },
+              description: {
+                type: 'string',
+                example: 'Trek у хорошому стані',
+              },
+              price: {
+                type: 'number',
+                example: 8500,
+              },
+              category: {
+                type: 'string',
+                example: 'sale',
+              },
+              image: {
+                type: 'string',
+                format: 'binary',
+                description: 'Фото оголошення',
+              },
+            },
+            required: ['title', 'description', 'price', 'category'],
+          },
         },
       },
     },
   },
+
   responses: {
     201: {
       description: 'Announcement created',
@@ -220,21 +250,53 @@ registry.registerPath({
   },
 });
 
+/* =========================
+   UPDATE ANNOUNCEMENT
+========================= */
+
 registry.registerPath({
   method: 'patch',
   path: '/announcements/{id}',
   tags: ['Announcements'],
   security: [{ bearerAuth: [] }],
+
   request: {
     params: announcementIdSchema,
+
     body: {
       content: {
-        'application/json': {
-          schema: updateAnnouncementSchema,
+        'multipart/form-data': {
+          schema: {
+            type: 'object',
+            properties: {
+              title: {
+                type: 'string',
+                example: 'Продам велосипед',
+              },
+              description: {
+                type: 'string',
+                example: 'Оновлений опис',
+              },
+              price: {
+                type: 'number',
+                example: 8000,
+              },
+              category: {
+                type: 'string',
+                example: 'sale',
+              },
+              image: {
+                type: 'string',
+                format: 'binary',
+                description: 'Нове фото оголошення',
+              },
+            },
+          },
         },
       },
     },
   },
+
   responses: {
     200: {
       description: 'Announcement updated',
@@ -253,6 +315,10 @@ registry.registerPath({
     },
   },
 });
+
+/* =========================
+   DELETE ANNOUNCEMENT
+========================= */
 
 registry.registerPath({
   method: 'delete',

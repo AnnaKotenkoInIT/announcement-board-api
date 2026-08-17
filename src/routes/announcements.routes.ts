@@ -9,6 +9,7 @@ import {
 } from '../controllers/announcements.controller.ts';
 
 import { authenticate } from '../middleware/authenticate.ts';
+import upload from '../middleware/upload.ts';
 
 import {
   validateBody,
@@ -28,6 +29,7 @@ const router = Router();
 router.post(
   '/',
   authenticate,
+  upload.single('image'),
   validateBody(createAnnouncementSchema),
   createAnnouncement,
 );
@@ -39,6 +41,7 @@ router.get('/:id', validateParams(announcementIdSchema), getAnnouncementById);
 router.patch(
   '/:id',
   authenticate,
+  upload.single('image'),
   validateParams(announcementIdSchema),
   validateBody(updateAnnouncementSchema),
   updateAnnouncement,

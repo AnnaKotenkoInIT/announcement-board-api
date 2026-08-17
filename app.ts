@@ -2,12 +2,41 @@ import express from 'express';
 import type { NextFunction, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import cors from 'cors';
+import { pinoHttp } from 'pino-http';
+import logger from './src/logger.ts';
 
 import { generateOpenApiDocument } from './src/openapi.ts';
 import authRouter from './src/routes/auth.routes.ts';
 import announcementsRouter from './src/routes/announcements.routes.ts';
 
 const app = express();
+
+app.use(helmet());
+
+app.use(pinoHttp({ logger }));
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
+  }),
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -36,6 +65,12 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     });
   }
 
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({
+      error: 'CORS origin not allowed',
+    });
+  }
+
   if (err.status && err.status >= 400 && err.status < 500) {
     return res.status(err.status).json({ error: err.message });
   }
@@ -58,7 +93,7 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(
+  logger.info(
     `Server is running on port ${PORT}: http://localhost:${PORT}/api-docs`,
   );
 });

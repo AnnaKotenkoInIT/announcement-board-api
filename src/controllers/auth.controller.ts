@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import prisma from '../../prisma/client.ts';
+import logger from '../logger.ts';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -49,6 +50,15 @@ export const register = async (req: Request, res: Response) => {
       userId: user.id,
     },
   });
+
+  logger.info(
+    {
+      userId: user.id,
+      username: user.username,
+      email: user.email,
+    },
+    'User registered successfully',
+  );
 
   return res.status(201).json({
     user: {
@@ -100,6 +110,14 @@ export const login = async (req: Request, res: Response) => {
       userId: user.id,
     },
   });
+
+  logger.info(
+    {
+      userId: user.id,
+      username: user.username,
+    },
+    'User logged in successfully',
+  );
 
   return res.status(200).json({
     user: {

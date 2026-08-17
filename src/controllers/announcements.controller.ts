@@ -1,12 +1,36 @@
 import type { Request, Response } from 'express';
+import fs from 'fs/promises';
 
 import prisma from '../../prisma/client.ts';
+import cloudinary from '../cloudinary.ts';
+import logger from '../logger.ts';
 
 export const createAnnouncement = async (req: Request, res: Response) => {
   try {
     const { title, description, price, category } = req.body;
 
     const userId = req.user.sub;
+
+    let imageUrl: string | undefined;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'announcements',
+      });
+
+      imageUrl = result.secure_url;
+
+      await fs.unlink(req.file.path);
+
+      logger.info(
+        {
+          userId,
+          imageUrl,
+          filename: req.file.originalname,
+        },
+        'Announcement photo uploaded',
+      );
+    }
 
     const announcement = await prisma.announcement.create({
       data: {
@@ -15,12 +39,37 @@ export const createAnnouncement = async (req: Request, res: Response) => {
         price,
         category,
         userId,
+        imageUrl,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            name: true,
+          },
+        },
       },
     });
+
+    logger.info(
+      {
+        userId,
+        announcementId: announcement.id,
+      },
+      'Announcement created',
+    );
 
     return res.status(201).json(announcement);
   } catch (error) {
     console.error(error);
+
+    if (req.file) {
+      try {
+        await fs.unlink(req.file.path);
+      } catch {}
+    }
 
     return res.status(500).json({
       error: 'Failed to create announcement',
@@ -148,6 +197,28 @@ export const updateAnnouncement = async (req: Request, res: Response) => {
       });
     }
 
+    let imageUrl = announcement.imageUrl;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'announcements',
+      });
+
+      imageUrl = result.secure_url;
+
+      await fs.unlink(req.file.path);
+
+      logger.info(
+        {
+          userId,
+          announcementId: id,
+          imageUrl,
+          filename: req.file.originalname,
+        },
+        'Announcement photo uploaded',
+      );
+    }
+
     const updatedAnnouncement = await prisma.announcement.update({
       where: { id },
       data: {
@@ -155,12 +226,31 @@ export const updateAnnouncement = async (req: Request, res: Response) => {
         description,
         price,
         category,
+        imageUrl,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            name: true,
+          },
+        },
       },
     });
 
     return res.status(200).json(updatedAnnouncement);
   } catch (error) {
     console.error(error);
+
+    if (req.file) {
+      try {
+        await fs.unlink(req.file.path);
+      } catch {
+        // File could be deleted
+      }
+    }
 
     return res.status(500).json({
       error: 'Failed to update announcement',

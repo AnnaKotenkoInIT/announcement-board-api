@@ -10,6 +10,7 @@ import {
 
 import { authenticate } from '../middleware/authenticate.ts';
 import { validateBody } from '../middleware/validate.ts';
+import { authRateLimiter } from '../middleware/rateLimiter.ts';
 
 import {
   loginSchema,
@@ -18,6 +19,8 @@ import {
 } from '../validators/auth.validator.ts';
 
 const router = Router();
+
+router.use(authRateLimiter);
 
 router.post('/register', validateBody(registerSchema), register);
 
