@@ -88,6 +88,12 @@ export const login = async (req: Request, res: Response) => {
   const accessToken = createAccessToken(user.id);
   const refreshToken = createRefreshToken(user.id);
 
+  await prisma.refreshToken.deleteMany({
+    where: {
+      userId: user.id,
+    },
+  });
+
   await prisma.refreshToken.create({
     data: {
       token: refreshToken,
@@ -110,7 +116,7 @@ export const login = async (req: Request, res: Response) => {
 export const getMe = async (req: Request, res: Response) => {
   const user = await prisma.user.findUnique({
     where: {
-      id: req.user!.id,
+      id: req.user!.sub,
     },
     select: {
       id: true,
@@ -154,10 +160,27 @@ export const refreshToken = async (req: Request, res: Response) => {
       });
     }
 
-    const accessToken = createAccessToken(Number(payload.sub));
+    const userId = Number(payload.sub);
+
+    const accessToken = createAccessToken(userId);
+    const newRefreshToken = createRefreshToken(userId);
+
+    await prisma.refreshToken.delete({
+      where: {
+        token: refreshToken,
+      },
+    });
+
+    await prisma.refreshToken.create({
+      data: {
+        token: newRefreshToken,
+        userId,
+      },
+    });
 
     return res.status(200).json({
       accessToken,
+      refreshToken: newRefreshToken,
     });
   } catch {
     return res.status(401).json({

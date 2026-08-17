@@ -129,6 +129,7 @@ registry.registerPath({
   method: 'post',
   path: '/auth/logout',
   tags: ['Auth'],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: {

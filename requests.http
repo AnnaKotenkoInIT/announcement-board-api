@@ -22,7 +22,7 @@ Content-Type: application/json
 
 ### Get current user
 GET http://localhost:3000/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgwOTA0NiwiZXhwIjoxNzg2ODA5OTQ2fQ.IwiB8Fmu71fOVQZ2M-YKKooMV-4qhqzN6LDGBERWob
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4Njk4Mzk0MCwiZXhwIjoxNzg2OTg0ODQwfQ.l8X5uAoPM6yxtpzLeZUCkrdyuRWIe5u9N0DYBpbXY-o
 
 
 ### Refresh access token
@@ -56,10 +56,10 @@ Content-Type: application/json
 ### Create announcement
 POST http://localhost:3000/announcements
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMjIyNiwiZXhwIjoxNzg2ODIzMTI2fQ.8vQkgBSvg8vBNVNcxlXZCKTDeCguDar_wSVw8s7U-kI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4Njk4Mzk0MCwiZXhwIjoxNzg2OTg0ODQwfQ.l8X5uAoPM6yxtpzLeZUCkrdyuRWIe5u9N0DYBpbXY-o
 
 {
-  "title": "Продам ноутбук акеп",
+  "title": "Продам ноутбук акеп test",
   "description": "Майже новий велосипед",
   "price": 5000,
   "category": "other"
@@ -80,16 +80,16 @@ Content-Type: application/json
 GET http://localhost:3000/announcements
 
 ### Get announcement by ID
-GET http://localhost:3000/announcements/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+GET http://localhost:3000/announcements/13
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4Njk4Mzk0MCwiZXhwIjoxNzg2OTg0ODQwfQ.l8X5uAoPM6yxtpzLeZUCkrdyuRWIe5u9N0DYBpbXY-o
 
 ### Update announcement
-PATCH http://localhost:3000/announcements/1
+PATCH http://localhost:3000/announcements/13
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4NjgyMDA1NCwiZXhwIjoxNzg2ODIwOTU0fQ.Xo6Fmig2MNDvV1EItzug9iO5SVAgFTvIbNcDgLCIGXU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTc4Njk4Mzk0MCwiZXhwIjoxNzg2OTg0ODQwfQ.l8X5uAoPM6yxtpzLeZUCkrdyuRWIe5u9N0DYBpbXY-o
 
 {
-  "price": 1500
+  "price": 500
 }
 
 ### Delete announcement

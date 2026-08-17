@@ -98,6 +98,16 @@ export const getAnnouncementById = async (req: Request, res: Response) => {
       where: {
         id: Number(id),
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (!announcement) {

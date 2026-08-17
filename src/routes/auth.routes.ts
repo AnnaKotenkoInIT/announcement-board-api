@@ -27,6 +27,6 @@ router.get('/me', authenticate, getMe);
 
 router.post('/refresh', validateBody(refreshTokenSchema), refreshToken);
 
-router.post('/logout', validateBody(refreshTokenSchema), logout);
+router.post('/logout', authenticate, validateBody(refreshTokenSchema), logout);
 
 export default router;

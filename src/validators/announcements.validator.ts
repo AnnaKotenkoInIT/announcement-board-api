@@ -7,7 +7,11 @@ export const createAnnouncementSchema = z.object({
   category: z.string().min(1),
 });
 
-export const updateAnnouncementSchema = createAnnouncementSchema.partial();
+export const updateAnnouncementSchema = createAnnouncementSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided',
+  });
 
 export const announcementIdSchema = z.object({
   id: z.coerce.number().int().positive(),
